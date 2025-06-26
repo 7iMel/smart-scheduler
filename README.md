@@ -1,100 +1,142 @@
-import datetime
+# SMART SCHEDULER
+# A simple command-line Python application to manage exam schedules efficiently. This tool allows you to add, view, edit, and delete exams while validating dates, times, and preventing scheduling conflicts.
 
-exams = {}
+# Features
+# - Add exams with code, name, date, start/end times, and room.
+# - Validate date (YYYY-MM-DD) and time (HH:MM) formats.
 
-def dates(date):
-    try:
-        datetime.datetime.strptime(date, "%Y-%m-%d")
-        return True
-    except ValueError:
-        return False
+# Calculate and display exam duration automatically.
+# - Prevent overlapping exams on the same date.
+# - Edit existing exam details.
+# - Delete exams by code.
+# - User-friendly menu interface.
 
-def times(time):
-    try:
-        datetime.datetime.strptime(time, "%H:%M")
-        return True
-    except ValueError:
-        return False
+# Requirements
+# - Python 3.x
+# - No external libraries required (uses built-in datetime module).
 
-def calculate_duration(start, end):
-    Hour_min = "%H:%M"
-    starttime = datetime.datetime.strptime(start, Hour_min)
-    endtime = datetime.datetime.strptime(end, Hour_min)
-    if endtime <= starttime:  # Fixed syntax error
-        return None
-    Hours = endtime - starttime
-    total_minutes = int(Hours.total_seconds() // 60)
-    hours = total_minutes // 60
-    minutes = total_minutes % 60
-    return f"{hours}h {minutes}m"
+# Usage
+# 1. Run the script:
 
-def add_exam():
-    while True:
-        code = input("Enter exam code (Ex. MATH112): ").strip().upper()
-        if 5 <= len(code) <= 10 and " " not in code:
-            if code in exams:
-                print("This exam code already exists.\n")
-                return
-            break
-        print("Code must be 5 to 10 characters with no spaces.")
+# 2. Use the interactive menu to:
+# - Add Exam: Input exam details. The system checks for valid inputs and conflicts.
+# - View Exams: Display all scheduled exams.
+# - Edit Exam: Modify details of an existing exam.
+# - Delete Exam: Remove an exam by its code.
+# - Exit: Quit the program.
 
-    name = input("Enter exam name: ").strip()
+# Exam Code Rules
+# - Must be 5 to 10 characters long.
+# - No spaces allowed.
+# - Case-insensitive but stored in uppercase.
 
-    while True:
-        date = input("Enter exam date (YYYY-MM-DD): ").strip()
-        if dates(date):
-            break
-        print("Invalid date format.")
+# Date and Time Formats
+# - Date: YYYY-MM-DD (e.g., 2025-07-15)
+# -Time: HH:MM in 24-hour format (e.g., 14:30)
 
-    while True:
-        start = input("Enter start time (HH:MM): ").strip()
-        if times(start):
-            break
-        print("Invalid start time.")
+# How It Works
+# - Validation: Inputs for date and time are validated using datetime.strptime.
+# - Duration Calculation: Computes the difference between start and end times.
+# - Conflict Check: Ensures no two exams overlap on the same date.
+# -  Data Storage: Exams are stored in a dictionary in memory during runtime. #
 
-    while True:
-        end = input("Enter end time (HH:MM): ").strip()
-        if times(end):
-            duration = calculate_duration(start, end)
-            if duration:
+    import datetime
+    
+    exams = {}
+    
+    def dates(date):
+        try:
+           datetime.datetime.strptime(date, "%Y-%m-%d")
+           return True
+        except ValueError:
+           return False
+        
+    def times(time):
+        try:
+           datetime.datetime.strptime(time, "%H:%M")
+           return True
+        except ValueError:
+           return False
+        
+    def calculate_duration(start, end):
+        Hour_min = "%H:%M"
+        starttime = datetime.datetime.strptime(start, Hour_min)
+        endtime = datetime.datetime.strptime(end, Hour_min)
+        if endtime <= starttime:  # Fixed syntax error
+            return None
+        Hours = endtime - starttime
+        total_minutes = int(Hours.total_seconds() // 60)
+        hours = total_minutes // 60
+        minutes = total_minutes % 60
+        return f"{hours}h {minutes}m"
+        
+    def add_exam():
+        while True:
+            code = input("Enter exam code (Ex. MATH112): ").strip().upper()
+            if 5 <= len(code) <= 10 and " " not in code:
+                if code in exams:
+                    print("This exam code already exists.\n")
+                    return
                 break
-        print("End time must be after start time, in HH:MM format.")
+            print("Code must be 5 to 10 characters with no spaces.")
 
-    room = input("Enter exam room: ").strip()
+         name = input("Enter exam name: ").strip()
+         
+         while True:
+             date = input("Enter exam date (YYYY-MM-DD): ").strip()
+             if dates(date):
+                 break
+             print("Invalid date format.")
 
-    for exam in exams.values():
-        if exam["date"] == date and (
-            exam["start_time"] < end and start < exam["end_time"]
-        ):
-            print(f"Conflict with another exam on {date} from {exam['start_time']} to {exam['end_time']}.\n")
+         while True:
+             start = input("Enter start time (HH:MM): ").strip()
+             if times(start):
+                 break
+             print("Invalid start time.")
+         
+         while True:
+             end = input("Enter end time (HH:MM): ").strip()
+             if times(end):
+                 duration = calculate_duration(start, end)
+                 if duration:
+                     break
+             print("End time must be after start time, in HH:MM format.")
+
+         room = input("Enter exam room: ").strip()
+         
+         for exam in exams.values():
+             if exam["date"] == date and (
+                 exam["start_time"] < end and start < exam["end_time"]
+             ):
+                 print(f"Conflict with another exam on {date} from {exam['start_time']} to {exam['end_time']}.\n")
+                 return
+
+         exams[code] = {
+            "name": name,
+            "date": date,
+            "start_time": start,
+            "end_time": end,
+            "duration": duration,
+            "room": room
+         }
+         print(f"✅ Exam added successfully! Duration: {duration}\n")
+    
+    def view_exams():
+        if not exams:
+            print(" No exams scheduled.\n")
             return
-
-    exams[code] = {
-        "name": name,
-        "date": date,
-        "start_time": start,
-        "end_time": end,
-        "duration": duration,
-        "room": room
-    }
-    print(f"✅ Exam added successfully! Duration: {duration}\n")
-
-def view_exams():
-    if not exams:
-        print(" No exams scheduled.\n")
-        return
-    print("\n📋 Scheduled Exams:")
-    for code, info in exams.items():
-        print(f"\nExam Code: {code}")
-        for key, val in info.items():
-            print(f"   {key.replace('_', ' ').capitalize()}: {val}")
-    print()
-
-def edit_exam():
-    code = input("Enter exam code to edit: ").strip().upper()
-    if code not in exams:
-        print("Exam not found.\n")
-        return
+        print("\n📋 Scheduled Exams:")
+        for code, info in exams.items():
+            print(f"\nExam Code: {code}")
+            for key, val in info.items():
+                print(f"   {key.replace('_', ' ').capitalize()}: {val}")
+        print()
+    
+    def edit_exam():
+        code = input("Enter exam code to edit: ").strip().upper()
+        if code not in exams:
+            print("Exam not found.\n")
+            return
 
     print("Leave fields blank to keep current value.")
     for field in ["name", "date", "start_time", "end_time", "room"]:
@@ -117,37 +159,47 @@ def edit_exam():
         return
     exams[code]["duration"] = new_duration
     print("Exam updated successfully!\n")
-
-def delete_exam():
-    code = input("Enter exam code to delete: ").strip().upper()
-    if exams.pop(code, None):
-        print("Exam deleted.\n")
-    else:
-        print("Exam not found.\n")
-
-def menu():
-    while True:
-        print("=== SMART SCHEDULER ===")
-        print("1. Add Exam")
-        print("2. View Exams")
-        print("3. Edit Exam")
-        print("4. Delete Exam")
-        print("5. Exit")
-        choice = input("Enter a number from (1–5): ").strip()
-
-        if choice == "1":
-            add_exam()
-        elif choice == "2":
-            view_exams()
-        elif choice == "3":
-            edit_exam()
-        elif choice == "4":
-            delete_exam()
-        elif choice == "5":
-            print("👋 Goodbye!\n")
-            break
+    
+    def delete_exam():
+        code = input("Enter exam code to delete: ").strip().upper()
+        if exams.pop(code, None):
+            print("Exam deleted.\n")
         else:
-            print("Invalid option.\n")
+            print("Exam not found.\n")
 
-if __name__ == "__main__":
-    menu()
+    def menu():
+        while True:
+            print("=== SMART SCHEDULER ===")
+            print("1. Add Exam")
+            print("2. View Exams")
+            print("3. Edit Exam")
+            print("4. Delete Exam")
+            print("5. Exit")
+            choice = input("Enter a number from (1–5): ").strip()
+
+            if choice == "1":
+                add_exam()
+            elif choice == "2":
+                view_exams()
+            elif choice == "3":
+                edit_exam()
+            elif choice == "4":
+                delete_exam()
+            elif choice == "5":
+                print("👋 Goodbye!\n")
+                break
+            else:
+                print("Invalid option.\n")
+         
+
+    if __name__ == "__main__":
+         menu()
+
+# Notes
+# -  The schedule is not persistent; all data is lost when the program exits.
+# -  Intended for simple, temporary exam scheduling needs.
+# -  Can be extended to save/load data from files or databases.
+
+License
+# -  This project is open-source and free to use.
+# -  Feel free to contribute or customize this scheduler to fit your needs.#
