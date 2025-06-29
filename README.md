@@ -1,4 +1,4 @@
-# Smart Scheduler - Management System
+# Smart Scheduler 
 The Smart Scheduler is a Python console application designed to help students, teachers, and administrators efficiently schedule exams while avoiding time conflicts. It provides an intuitive interface for adding, editing, deleting, and viewing exams, complete with automatic duration calculation and conflict detection.
 
 ## Features
