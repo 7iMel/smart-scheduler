@@ -61,7 +61,7 @@ Contributions, suggestions, and improvements are welcome! Feel free to:
 - Submit pull requests
 
 ## License
-This project is licensed under the MIT License.
+This program is open source
 
 ## Authors
 1. Imelda Pauline M. Pailande
