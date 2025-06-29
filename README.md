@@ -49,16 +49,11 @@ smart-scheduler/
 - Enter exam room: Room 101 
 - Exam added successfully! Duration: 2h 0m 
 
-
-
 ## Future Improvements
 - Persistent storage using files (e.g., JSON or CSV)
 - Graphical User Interface (GUI) version using Tkinter or PyQt
 - Web-based version with Flask or Django
 - Advanced conflict detection across multiple dates
-
-
-
 
 ## Contributions
 Contributions, suggestions, and improvements are welcome! Feel free to:
@@ -66,13 +61,8 @@ Contributions, suggestions, and improvements are welcome! Feel free to:
 - Open issues
 - Submit pull requests
 
-
-
-
 ## License
 This project is licensed under the MIT License.
-
-
 
 ## Authors
 1. Imelda Pauline M. Pailande
