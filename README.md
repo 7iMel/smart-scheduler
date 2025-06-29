@@ -25,12 +25,11 @@ The Smart Scheduler is a Python console application designed to help students, t
    Follow the On-Screen Menu
 
 ## Project Structure
-smart-scheduler/
-
-├── smart_scheduler.py    
+smart-scheduler/  
 
 ├── README.md                       
 
+├── smart_scheduler.py
 
 ## Example Interaction
 === SMART SCHEDULER ===
